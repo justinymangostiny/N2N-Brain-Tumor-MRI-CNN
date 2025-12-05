@@ -1,17 +1,21 @@
-import kagglehub as kh
 import os
 import pandas as pd
 from PIL import Image
 import numpy as np
+import torch
+import torchvision
+import torchvision.transforms as transforms
 
-path = kh.dataset_download("masoudnickparvar/brain-tumor-mri-dataset")
+train_dir = "data/Training"
+test_dir = "data/Testing"
 
-# List all files
-for root, dirs, files in os.walk(path):
-    for file in files:
-        print(os.path.join(root, file))
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+])
 
-# Load and inspect an image
-img = Image.open(os.path.join(path, 'image_file.jpg'))
-img_array = np.array(img)
-print(img_array.shape)
+trainset = torchvision.datasets.CIFAR10(root = train_dir, )
+testset = torchvision.datasets.CIFAR10(root = test_dir)
+
+batch_size = 4
+
